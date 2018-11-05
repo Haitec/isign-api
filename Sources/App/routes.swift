@@ -20,6 +20,10 @@ public func routes(_ router: Router) throws {
     
     var isOk = true
     
+    router.get("/") { req in
+        return req.redirect(to: "index.html")
+    }
+    
     router.get("status", Int.parameter) { req -> Status in
         let id = try req.parameters.next(Int.self)
         return Status(id: id, isOk: isOk)
