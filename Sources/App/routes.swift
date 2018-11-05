@@ -13,6 +13,11 @@ public func routes(_ router: Router) throws {
         let isOk: Bool
     }
     
+    struct TriggerRequest: Content {
+        let id: Int
+        let action: String
+    }
+    
     var isOk = true
     
     router.get("status", Int.parameter) { req -> Status in
@@ -25,6 +30,14 @@ public func routes(_ router: Router) throws {
             print(statusRequest.id)
             print(statusRequest.isOk)
             isOk = statusRequest.isOk
+            return .ok
+        }
+    }
+    
+    router.post("trigger") { req -> Future<HTTPStatus> in
+        return try req.content.decode(TriggerRequest.self).map(to: HTTPStatus.self) { triggerRequest in
+            print(triggerRequest.action)
+            isOk = Bool.random()
             return .ok
         }
     }
